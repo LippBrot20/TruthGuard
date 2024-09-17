@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Chrome Tester",
+  "version": "1.0",
+  "description": "Eine einfache Chrome-Erweiterung",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "48": "logo/chrome_extension_logo.png"
+  },
+  "permissions": [
+    "activeTab"
+  ]
+}
