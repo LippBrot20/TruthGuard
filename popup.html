@@ -4,12 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Truthguard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+        }
+        #output, #summaryOutput {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
-    <button id="actionButton">Klick mich</button>
-    <script src="popup.js"></script>
-    <button id="extractText">Extract Text</button>
-
-    <script src="popup.js"></script>
+<h1>Truthguard</h1>
+<button id="extractText">Text extrahieren</button>
+<button id="summarizeText">Zusammenfassen</button>
+<div id="output"></div>
+<div id="summaryOutput"></div>
+<!-- Lade das Skript am Ende des Body-Tags -->
+<script src="popup.js"></script>
 </body>
 </html>

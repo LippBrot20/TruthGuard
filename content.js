@@ -1,4 +1,4 @@
-// Text der Webseite auslesen
+// Content Script
 const pageText = document.body.innerText;
 
 // Text in Abschnitte unterteilen (z.B. nach Absätzen)
@@ -12,5 +12,5 @@ const textData = {
 // Textabschnitte in der Konsole ausgeben
 console.log("Extrahierte Textabschnitte:", sections);
 
-// JSON an den Background-Skript senden (optional)
+// JSON an den Background-Skript senden
 chrome.runtime.sendMessage({ action: 'saveText', data: textData });
