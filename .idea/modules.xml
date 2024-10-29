@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ThruthguardBackend.iml" filepath="$PROJECT_DIR$/ThruthguardBackend.iml" />
       <module fileurl="file://$PROJECT_DIR$/chrome_extension.iml" filepath="$PROJECT_DIR$/chrome_extension.iml" />
     </modules>
   </component>
