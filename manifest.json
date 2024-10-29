@@ -17,9 +17,6 @@
   "background": {
     "service_worker": "background.js"
   },
-  "storage": {
-    "openai_api_key": "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"
-  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

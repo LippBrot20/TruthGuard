@@ -2,9 +2,6 @@
 const { Configuration, OpenAIApi } = require("openai");
 require('dotenv').config();
 
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-});
 
 const openai = new OpenAIApi(configuration);
 
@@ -22,5 +19,5 @@ async function summarizeText(text) {
         throw error;
     }
 }
-
+f6d4a1d
 module.exports = { summarizeText };

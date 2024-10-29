@@ -3,7 +3,7 @@ const { Configuration, OpenAIApi } = require("openai");
 
 // Speicher den API-Schlüssel bei der Installation
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.local.set({ "openai_api_key": "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" }, () => {
+    chrome.storage.local.set({ "openai_api_key": "" }, () => {
         console.log("API-Schlüssel wurde in chrome.storage.local gespeichert.");
     });
 });
