@@ -12,5 +12,14 @@ const textData = {
 // Textabschnitte in der Konsole ausgeben
 console.log("Extrahierte Textabschnitte:", sections);
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'summarizeTextSections') {
+        // Nachricht an background.js weiterleiten
+        chrome.runtime.sendMessage(message, sendResponse);
+        return true; // Asynchrone Antwort
+    }
+});
+
+
 // JSON an den Background-Skript senden
-chrome.runtime.sendMessage({ action: 'saveText', data: textData });
+chrome.runtime.sendMessage({ action: 'summarizeTextSections', data: textData });
