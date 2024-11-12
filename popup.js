@@ -15,10 +15,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Nachricht an background.js mit dem extrahierten Text
                 chrome.runtime.sendMessage({ action: 'summarizeTextSections', data: { sections: results[0].result } }, (response) => {
+                    //console.log("Empfangene Antwort vom Hintergrundskript:", response); // Debugging
+                    func: showSummary(response);
                     if (response && response.summary) {
                         summaryOutput.innerHTML = `<p><strong>Zusammenfassung:</strong> ${response.summary}</p>`;
                     } else {
-                        const errorMsg = response?.error || "Unbekannter Fehler";
+                        const errorMsg = response?.error || "keine API Antwort bekommen";
                         summaryOutput.innerHTML = `<p>Fehler beim Zusammenfassen: ${errorMsg}</p>`;
                         console.error("Fehler bei der Zusammenfassung:", errorMsg);
                     }
@@ -34,4 +36,8 @@ function extractText() {
     const sections = pageText.split('\n\n');
     console.log("Extrahierte Textabschnitte:", sections);
     return sections;
+}
+
+function showSummary(ans){
+    console.log("API-Antwort: \n", ans);
 }
