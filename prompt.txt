@@ -1,0 +1,9 @@
+Fasse den folgenden Text in genau fünf prägnanten, unabhängigen Kernsätzen zusammen. Jeder Satz muss eigenständig Sinn
+ergeben und darf weder Rückbezüge noch Verweise auf andere Sätze enthalten. Schreibe nach jedem Satz eine mit ";" getrennte
+Kategorie (Fakt, News, Meinung, Statistik) und füge am Ende eines jeden Satzes ein "/" hinzu, mit Ausnahme des letzten Satzes.
+Vermeide Listen, Aufzählungen oder jegliche zusätzliche Formatierung.
+Die Kategorien bestehen aus Fakt, News, Meinung und Statistik.
+Fakt: Eine Tatsache, wie sie in Wikipedia geschrieben steht.
+News: Etwas, das passiert ist, worüber in den Medien berichtet wurde.
+Meinung: Eine subjektive Meinung, die nicht beweisbar ist.
+Statistik: Etwas statistisches wie beispielsweise Prozentsätze.
