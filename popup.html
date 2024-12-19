@@ -9,22 +9,41 @@
             font-family: Arial, sans-serif;
             padding: 10px;
         }
-        #output, #summaryOutput {
+        h1 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid #007bff;
+            border-radius: 3px;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #summaryOutput {
             margin-top: 10px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f9f9f9;
+            white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
 <h1>Truthguard</h1>
-<button id="extractText">Text extrahieren</button>
-<button id="summarizeText">Zusammenfassen</button>
-<div id="output"></div>
+<!-- Ein Button für beide Aktionen -->
+<button id="analyzeText">Text analysieren</button>
+
+<!-- Bereich für die Zusammenfassung -->
 <div id="summaryOutput"></div>
-<!-- Lade das Skript am Ende des Body-Tags -->
+
+<!-- Lade das Skript -->
 <script src="popup.js"></script>
 </body>
 </html>

@@ -1,0 +1,47 @@
+[33mcommit 7c8d5090faad91428f0c638646a55c8f79776461[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: LeSeltsam <gobelinbogen@gmail.com>
+Date:   Thu Dec 19 18:13:22 2024 +0100
+
+    api summary wird endlich in console angezeigt
+
+[33mcommit 00c9141a5d8c6827b7287abef68bb751e8177742[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: LeSeltsam <gobelinbogen@gmail.com>
+Date:   Tue Nov 12 20:11:21 2024 +0100
+
+    api abfragen funktionieren
+
+[33mcommit 5767fd3c0c92fc5a944d794cc5c9018288512ea1[m
+Author: LeSeltsam <gobelinbogen@gmail.com>
+Date:   Wed Oct 30 08:04:55 2024 +0100
+
+    api abfragen fixes
+
+[33mcommit d09fff3d15b6b99caf46e83aace9ab83ab9f1fe8[m[33m ([m[1;31morigin/benjamin[m[33m)[m
+Author: bogbeb19 <94896905+bogbeb19@users.noreply.github.com>
+Date:   Tue Oct 29 22:54:08 2024 +0100
+
+    OpenAI abfragen (unvollständig)
+
+[33mcommit 159f90e95d5dbe9c06a1fc8879c3470db439e53f[m
+Author: bogbeb19 <94896905+bogbeb19@users.noreply.github.com>
+Date:   Tue Oct 29 22:38:09 2024 +0100
+
+    OpenAI abfragen (unvollständig)
+
+[33mcommit 454d79e4c31eef56761ffc3a3781b0d60ac8d836[m
+Author: LeSeltsam <gobelinbogen@gmail.com>
+Date:   Tue Oct 29 15:44:22 2024 +0100
+
+    backend setup
+
+[33mcommit fba6bab690bedf1e3368d53fe8c8ed6f145cea51[m
+Author: bogbeb19 <94896905+bogbeb19@users.noreply.github.com>
+Date:   Tue Sep 17 19:53:37 2024 +0200
+
+    Chrome Plugin Template
+
+[33mcommit b450c2494742dbe55ac2394799684f4bf2a8f944[m
+Author: lipala20 <106226745+LippBrot20@users.noreply.github.com>
+Date:   Tue Sep 17 19:49:25 2024 +0200
+
+    Create readme
