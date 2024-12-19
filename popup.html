@@ -8,6 +8,18 @@
         body {
             font-family: Arial, sans-serif;
             padding: 10px;
+            width: 400px; /* Breite des Popups */
+            height: 100vh; /* Höhe des Popups (volle Ansichtshöhe) */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            box-sizing: border-box;
+            border-radius: 15px; /* Abrundung des Popups */
+            overflow: hidden; /* Verhindert Überlauf bei abgerundeten Ecken */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optionale Schatten für mehr Stil */
+            background: rgba(255, 255, 255, 0.95);
         }
         h1 {
             font-size: 20px;
@@ -16,6 +28,7 @@
         button {
             padding: 5px 10px;
             font-size: 14px;
+            font-style: initial;
             cursor: pointer;
             border: 1px solid #007bff;
             border-radius: 3px;
@@ -25,6 +38,7 @@
         button:hover {
             background-color: #0056b3;
         }
+
         #summaryOutput {
             margin-top: 10px;
             padding: 10px;
@@ -32,18 +46,19 @@
             border-radius: 5px;
             background-color: #f9f9f9;
             white-space: pre-wrap;
+            max-width: 380px; /* Passt sich der Breite des Popups an */
+            min-width: 380px;
+            max-height: 200px; /* Begrenze die maximale Höhe */
+            min-height: 200px;
+            overflow-y: auto; /* Scrollbalken bei zu viel Inhalt */
         }
     </style>
 </head>
 <body>
 <h1>Truthguard</h1>
-<!-- Ein Button für beide Aktionen -->
-<button id="analyzeText">Text analysieren</button>
-
-<!-- Bereich für die Zusammenfassung -->
+<p>Lassen Sie einfach die gewünschten Informationen analysieren und erhalten Sie klare, kategorisierte Zusammenfassungen auf Knopfdruck – schnell, zuverlässig und übersichtlich!</p>
+<button id="analyzeText">Seite analysieren und zusammenfassen</button>
 <div id="summaryOutput"></div>
-
-<!-- Lade das Skript -->
 <script src="popup.js"></script>
 </body>
 </html>
