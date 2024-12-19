@@ -11,7 +11,7 @@ async function summarizeText(text) {
             model: "text-davinci-003", // You can use other models depending on your requirements
             prompt: `Summarize the following text into key points:\n\n${text}`,
             temperature: 0.5,
-            max_tokens: 150,
+            max_tokens: 500,
         });
         return response.data.choices[0].text.trim();
     } catch (error) {
@@ -19,5 +19,4 @@ async function summarizeText(text) {
         throw error;
     }
 }
-f6d4a1d
 module.exports = { summarizeText };
