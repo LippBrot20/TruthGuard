@@ -8,6 +8,8 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log("Nachricht erhalten im background.js:", message);
 
+
+
     if (message.action === 'summarizeTextSections') {
         // Laden des API-Schlüssels aus dem Speicher
         chrome.storage.local.get("openai_api_key", ({ openai_api_key }) => {
@@ -53,6 +55,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
                             console.log("API-Antwort:", data); // Ausgabe der vollständigen API-Antwort in der Konsole
 
+                            const socket = new WebSocket("ws://localhost:6789");
+
+                            socket.addEventListener('open', function (event) {
+                                socket.send('Websockets');
+                            });
+
+                            socket.addEventListener('message', function (event) {
+                                console.log("Antwort von Backend: " + event.data);
+                            });
+
+                            const contactServer = () => {
+                                socket.send("Initialize");
+                            }
+
+                            socket.onerror = (error) => {
+                                console.error("WebSocket-Fehler:", error);
+                            };
+
                             // Überprüfen, ob die Antwort gültig ist
                             if (data.choices && data.choices[0] && data.choices[0].message) {
                                 sendResponse({ summary: data.choices[0].message.content });
@@ -75,4 +95,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
         return true;
     }
+
+
 });
