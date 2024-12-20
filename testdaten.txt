@@ -1,0 +1,48 @@
+
+# Wahre Fakten (True)
+1. Der Mount Everest ist der höchste Berg der Erde. [True]
+2. Der menschliche Körper besteht zu etwa 60% aus Wasser. [True]
+3. Das Periodensystem der Elemente wurde von Dmitri Mendelejew entwickelt. [True]
+4. Blut besteht aus roten und weißen Blutkörperchen, Blutplasma und Blutplättchen. [True]
+5. Der Amazonas ist der längste Fluss der Welt. [True]
+
+# Falsche Fakten (False)
+6. Menschen können unter Wasser ohne Hilfsmittel atmen. [False]
+7. Ein Jahr hat 400 Tage. [False]
+8. Katzen sind Pflanzenfresser. [False]
+9. Die Entfernung zwischen Erde und Mond beträgt 1 Million Kilometer. [False]
+10. Die Hauptstadt von Italien ist Barcelona. [False]
+
+# Gemischte Fakten
+11. Der Hund ist ein Säugetier. [True]
+12. Die Venus ist kälter als der Merkur, obwohl sie näher an der Sonne liegt. [False]
+13. Ein Tag auf dem Merkur dauert länger als ein Jahr auf dem Merkur. [True]
+14. Das menschliche Herz hat fünf Kammern. [False]
+15. Die Freiheitsstatue steht in New York City. [True]
+16. Der größte Planet in unserem Sonnensystem ist die Erde. [False]
+17. Albert Einstein hat die Relativitätstheorie formuliert. [True]
+18. Der Pazifik ist der kleinste Ozean der Erde. [False]
+19. Schneeflocken sind immer symmetrisch. [False]
+20. Der Eiffelturm befindet sich in Paris. [True]
+
+
+# Wahre Fakten (True)
+1. Die Erde umkreist die Sonne in ungefähr 365 Tagen. [True]
+2. Wasser siedet bei 100°C auf Meereshöhe. [True]
+3. Die Hauptstadt von Frankreich ist Paris. [True]
+4. Menschen haben 206 Knochen im Körper. [True]
+5. Der chemische Name von Kochsalz ist Natriumchlorid. [True]
+
+# Falsche Fakten (False)
+6. Die Erde ist flach. [False]
+7. Menschen können ohne Wasser 30 Tage lang überleben. [False]
+8. Der Mond besteht vollständig aus Käse. [False]
+9. 2 + 2 = 5. [False]
+10. Die Hauptstadt von Deutschland ist München. [False]
+
+# Gemischte Fakten
+11. Die Sonne ist ein Planet. [False]
+12. Bäume produzieren Sauerstoff durch Photosynthese. [True]
+13. Pinguine können fliegen. [False]
+14. Die erste Mondlandung war 1969. [True]
+15. Elektronen haben eine positive Ladung. [False]
