@@ -2,7 +2,7 @@ console.log("background.js wird geladen...");
 
 chrome.runtime.onInstalled.addListener(() => {
     // API-Schlüssel beim Installieren setzen
-    chrome.storage.local.set({ openai_api_key: "YOUR_API_KEY" }); //API Key einfügen
+    chrome.storage.local.set({ openai_api_key: "YOUR_KEY" }); //API Key einfügen
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -58,7 +58,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                             const socket = new WebSocket("ws://localhost:6789");
 
                             socket.addEventListener('open', function (event) {
-                                socket.send('Websockets');
+                                socket.send('Der Vesuv ist ein Vulkan');
                             });
 
                             socket.addEventListener('message', function (event) {

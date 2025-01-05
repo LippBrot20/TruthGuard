@@ -1,12 +1,58 @@
 import asyncio
 import websockets
-import requests
 import urllib.request
 from bs4 import BeautifulSoup
-import re
-from urllib.parse import urljoin, urlparse
-import time
 import wikipedia
+from urllib.parse import quote
+
+import nltk
+from nltk.corpus import stopwords
+import string
+from unidecode import unidecode
+
+nltk.download('stopwords')
+
+
+class DataCleaner:
+    def __init__(self):
+        # Deutsche Stopwörter laden
+        self.german_stopwords = set(stopwords.words('german'))
+
+        # Stopwort "nicht" und andere spezifizierte Wörter entfernen
+        for word in ["nicht", "kein", "keine", "keiner"]:
+            if word in self.german_stopwords:
+                self.german_stopwords.remove(word)
+
+        # Umlaute in den Stopwörtern ersetzen
+        self.german_stopwords = {self.replace_umlauts(word) for word in self.german_stopwords}
+
+    def replace_umlauts(self, word):
+        umlaut_mapping = {
+            'ä': 'ae', 'Ä': 'Ae',
+            'ö': 'oe', 'Ö': 'Oe',
+            'ü': 'ue', 'Ü': 'Ue',
+            'ß': 'ss'
+        }
+        for umlaut, replacement in umlaut_mapping.items():
+            word = word.replace(umlaut, replacement)
+        return word
+
+    def clean_text(self, text):
+        # Sonderzeichen entfernen und Umlaute umwandeln
+        text = self.replace_umlauts(text)
+        text = unidecode(text)
+
+        # Punktuation entfernen
+        text = text.translate(str.maketrans('', '', string.punctuation))
+
+        # Text in Wörter splitten
+        words = text.split()
+
+        # Stopwörter entfernen
+        filtered_words = [word for word in words if self.replace_umlauts(word.lower()) not in self.german_stopwords]
+
+        # Bereinigten Text zurückgeben
+        return ' '.join(filtered_words)
 
 class WebScraper:
     def __init__(self, base_url):
@@ -21,13 +67,13 @@ class WebScraper:
         soup = BeautifulSoup(html, 'html.parser')
 
         footer = soup.find('footer')
+        header = soup.find('head')
         if footer:
             footer.decompose()
+        if header:
+            header.decompose()
 
-        # Extrahiere den gesamten sichtbaren Text
         text = soup.get_text(separator=' ', strip=True)
-
-        # Entferne überflüssige Leerzeichen und Zeilenumbrüche
         clean_text = ' '.join(text.split())
 
         return clean_text
@@ -35,7 +81,8 @@ class WebScraper:
     def get_page_content(self, url):
         try:
             print(f"Reading URL: {url}")
-            with urllib.request.urlopen(url) as fin:
+            encoded_url = quote(url, safe=":/")
+            with urllib.request.urlopen(encoded_url) as fin:
                 html = fin.read().decode("utf-8")
 
                 text = self.parse_html(html)
@@ -57,16 +104,6 @@ class WebScraper:
             print(f"Wikipedia Fehler: {e}")
             return []
 
-    def scrape_page(self, url):
-        with open("scraped_content.txt", 'w') as file:
-            file.truncate(0)  # Löscht den gesamten Inhalt der Datei
-
-        urls = self.get_wikipedia_urls("Websockets")
-        scraped_data = ""
-
-        for u in urls:
-            self.save_to_file("scraped_content.txt", self.get_page_content(u))
-
     def save_to_file(self, filename, data):
         with open(filename, 'a', encoding='utf-8') as f:
             f.write(data + '\n')
@@ -74,13 +111,23 @@ class WebScraper:
 
 async def handler(websocket):
     scraper = WebScraper(base_url="https://de.wikipedia.org")
+    cleaner = DataCleaner()
 
     async for message in websocket:
         print(f"Nachricht erhalten: {message}")
-        search_url = ("https://de.wikipedia.org/w/index.php?search="
-                      f"{'+'.join(message.split())}&title=Spezial%3ASuche&profile=advanced&fulltext=1")
+        # search_url = ("https://de.wikipedia.org/w/index.php?search="
+        #               f"{'+'.join(message.split())}&title=Spezial%3ASuche&profile=advanced&fulltext=1")
 
-        scraper.scrape_page(search_url)
+        with open("scraped_content.txt", 'w') as file:
+            file.truncate(0)  # Löscht den gesamten Inhalt der Datei
+
+        clean_message = cleaner.clean_text(message)
+        print(f"Clean Message: {clean_message}")
+
+        urls = scraper.get_wikipedia_urls(clean_message)
+
+        for u in urls:
+            scraper.save_to_file("scraped_content.txt", scraper.get_page_content(u))
 
         response = f"Scraping completed for query: {message}. Content saved to scraped_content.txt"
         await websocket.send(response)
