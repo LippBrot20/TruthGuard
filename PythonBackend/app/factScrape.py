@@ -1,10 +1,12 @@
 import asyncio
 import websockets
 import requests
+import urllib.request
 from bs4 import BeautifulSoup
 import re
 from urllib.parse import urljoin, urlparse
 import time
+import wikipedia
 
 class WebScraper:
     def __init__(self, base_url):
@@ -13,64 +15,62 @@ class WebScraper:
             'wikipedia.org'
         }
         self.visited_urls = set()
-        self.text_content = []
         self.request_delay = 1
+
+    def parse_html(self, html):
+        soup = BeautifulSoup(html, 'html.parser')
+
+        footer = soup.find('footer')
+        if footer:
+            footer.decompose()
+
+        # Extrahiere den gesamten sichtbaren Text
+        text = soup.get_text(separator=' ', strip=True)
+
+        # Entferne überflüssige Leerzeichen und Zeilenumbrüche
+        clean_text = ' '.join(text.split())
+
+        return clean_text
 
     def get_page_content(self, url):
         try:
-            print(f"Loading URL: {url}")
-            response = requests.get(url)
-            response.raise_for_status()
-            time.sleep(self.request_delay)
-            return response.text
+            print(f"Reading URL: {url}")
+            with urllib.request.urlopen(url) as fin:
+                html = fin.read().decode("utf-8")
+
+                text = self.parse_html(html)
+
+                return text
         except Exception as e:
             print(f"Error fetching {url}: {e}")
             return None
 
-    def extract_links(self, soup, current_url):
-        links = set()
-        for anchor in soup.find_all('a', href=True):
-            href = anchor['href']
-            absolute_url = urljoin(current_url, href)
+    def get_wikipedia_urls(self, query, max_results=4):
+        wikipedia.set_lang("de")
 
-            if urlparse(absolute_url).netloc.endswith("wikipedia.org"):
-                links.add(absolute_url)
-        return list(links)[:4]  # Limit to the first 4 subpages
+        try:
+            search_results = wikipedia.search(query, results=max_results)
 
-    def extract_text(self, soup):
-        for element in soup(["script", "style", "nav", "footer", "header"]):
-            element.decompose()
-
-        text = soup.get_text()
-        lines = [line.strip() for line in text.splitlines() if line.strip()]
-        text = ' '.join(lines)
-        sentences = re.split('[.!?]+(?=(?:[A-Z][^.]|$))', text)
-        return [s.strip() for s in sentences if s.strip() and len(s.split()) > 3]
+            urls = [f"https://de.wikipedia.org/wiki/{result.replace(' ', '_')}" for result in search_results]
+            return urls
+        except Exception as e:
+            print(f"Wikipedia Fehler: {e}")
+            return []
 
     def scrape_page(self, url):
-        if url in self.visited_urls:
-            return
+        with open("scraped_content.txt", 'w') as file:
+            file.truncate(0)  # Löscht den gesamten Inhalt der Datei
 
-        print(f"Scraping: {url}")
-        self.visited_urls.add(url)
-        content = self.get_page_content(url)
+        urls = self.get_wikipedia_urls("Websockets")
+        scraped_data = ""
 
-        if not content:
-            return
+        for u in urls:
+            self.save_to_file("scraped_content.txt", self.get_page_content(u))
 
-        soup = BeautifulSoup(content, 'html.parser')
-        sentences = self.extract_text(soup)
-        self.text_content.extend(sentences)
+    def save_to_file(self, filename, data):
+        with open(filename, 'a', encoding='utf-8') as f:
+            f.write(data + '\n')
 
-        links = self.extract_links(soup, url)
-        for link in links:
-            if link not in self.visited_urls:
-                self.scrape_page(link)
-
-    def save_to_file(self, filename):
-        with open(filename, 'w', encoding='utf-8') as f:
-            for sentence in self.text_content:
-                f.write(sentence + '\n')
 
 async def handler(websocket):
     scraper = WebScraper(base_url="https://de.wikipedia.org")
@@ -80,12 +80,11 @@ async def handler(websocket):
         search_url = ("https://de.wikipedia.org/w/index.php?search="
                       f"{'+'.join(message.split())}&title=Spezial%3ASuche&profile=advanced&fulltext=1")
 
-        scraper.text_content = []  # Reset content for a new scrape
         scraper.scrape_page(search_url)
-        scraper.save_to_file("scraped_content.txt")
 
         response = f"Scraping completed for query: {message}. Content saved to scraped_content.txt"
         await websocket.send(response)
+
 
 async def main():
     server = await websockets.serve(handler, "localhost", 6789)
