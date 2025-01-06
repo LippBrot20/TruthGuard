@@ -1,0 +1,2 @@
+Du bekommst eine Frage und ein paar Informationen. Du gibst ein Key/Value Pair zurück. Links ist ein boolean Wert (true oder false) und rechts,
+getrennt mit einem Schrägstrich, ist eine kurze Antwort auf die Frage als String. Du darfst nichts anderes als das Verlangte antworten.

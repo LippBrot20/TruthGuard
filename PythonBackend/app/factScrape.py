@@ -1,3 +1,4 @@
+import os
 import asyncio
 import websockets
 import urllib.request
@@ -9,6 +10,8 @@ import nltk
 from nltk.corpus import stopwords
 import string
 from unidecode import unidecode
+
+from openai import AsyncOpenAI
 
 nltk.download('stopwords')
 
@@ -67,11 +70,16 @@ class WebScraper:
         soup = BeautifulSoup(html, 'html.parser')
 
         footer = soup.find('footer')
-        header = soup.find('head')
         if footer:
             footer.decompose()
+
+        header = soup.find('head')
         if header:
             header.decompose()
+
+        left_panel = soup.find(id="mw-panel")
+        if left_panel:
+            left_panel.decompose()
 
         text = soup.get_text(separator=' ', strip=True)
         clean_text = ' '.join(text.split())
@@ -83,7 +91,8 @@ class WebScraper:
             print(f"Reading URL: {url}")
             encoded_url = quote(url, safe=":/")
             with urllib.request.urlopen(encoded_url) as fin:
-                html = fin.read().decode("utf-8")
+                html = fin.read().decode("utf-8", errors="ignore")
+
 
                 text = self.parse_html(html)
 
@@ -92,7 +101,7 @@ class WebScraper:
             print(f"Error fetching {url}: {e}")
             return None
 
-    def get_wikipedia_urls(self, query, max_results=4):
+    def get_wikipedia_urls(self, query, max_results=1):
         wikipedia.set_lang("de")
 
         try:
@@ -109,14 +118,45 @@ class WebScraper:
             f.write(data + '\n')
 
 
+class AnswerProcessor:
+    def __init__(self):
+        self.client = AsyncOpenAI(api_key="YOUR_API_KEY")  # hier API Key einfügen
+
+    def read_file_content(self, file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                return file.read()
+        except FileNotFoundError:
+            return "File not found."
+
+    async def query_openai(self, query, model="gpt-3.5-turbo"):
+        try:
+            response = await self.client.chat.completions.create(
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": query}
+                ],
+                model=model
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            return f"Error: {e}"
+
+    def answer(self, input_question):
+        file_content = self.read_file_content("scraped_content.txt")
+        prompt = self.read_file_content("answerprompt.txt")
+        query = prompt + "\n\n Frage: \n" + input_question + "\n\n" + "Informationen: \n" + file_content
+        gpt_response = self.query_openai(query)
+        return gpt_response
+
+
 async def handler(websocket):
     scraper = WebScraper(base_url="https://de.wikipedia.org")
     cleaner = DataCleaner()
+    processor = AnswerProcessor()
 
     async for message in websocket:
         print(f"Nachricht erhalten: {message}")
-        # search_url = ("https://de.wikipedia.org/w/index.php?search="
-        #               f"{'+'.join(message.split())}&title=Spezial%3ASuche&profile=advanced&fulltext=1")
 
         with open("scraped_content.txt", 'w') as file:
             file.truncate(0)  # Löscht den gesamten Inhalt der Datei
@@ -131,6 +171,9 @@ async def handler(websocket):
 
         response = f"Scraping completed for query: {message}. Content saved to scraped_content.txt"
         await websocket.send(response)
+
+        response = await processor.answer(message)
+        await websocket.send(str(response))
 
 
 async def main():
