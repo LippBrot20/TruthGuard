@@ -33,13 +33,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                             "Authorization": `Bearer ${openai_api_key}`
                         },
                         body: JSON.stringify({
-                            model: "gpt-3.5-turbo",
+                            model: "gpt-4",
                             messages: [
                                 { role: "system", content: prompt },
                                 { role: "user", content: textToSummarize }
                             ],
                             temperature: 0.5,
-                            max_tokens: 150
+                            max_tokens: 1000
                         })
                     })
                         .then(response => response.json())
@@ -53,7 +53,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                                 );
                             });
 
-                            console.log("API-Antwort:", data); // Ausgabe der vollständigen API-Antwort in der Konsole
+                            console.log("API-Antwort vollständig:", JSON.stringify(data, null, 2)); // Ausgabe der vollständigen API-Antwort in der Konsole
 
                             const socket = new WebSocket("ws://localhost:6789");
 
@@ -75,7 +75,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
                             // Überprüfen, ob die Antwort gültig ist
                             if (data.choices && data.choices[0] && data.choices[0].message) {
-                                sendResponse({ summary: data.choices[0].message.content });
+                                sendResponse({ summary: data.choices[0].message.content.trim() });
                             } else {
                                 sendResponse({ error: "Ungültige API-Antwort" });
                             }
