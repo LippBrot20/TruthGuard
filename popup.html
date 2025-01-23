@@ -7,58 +7,118 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 10px;
-            width: 400px; /* Breite des Popups */
-            height: 100vh; /* Höhe des Popups (volle Ansichtshöhe) */
+            padding: 20px;
+            width: 300px;
+            height: 400px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             margin: 0;
             box-sizing: border-box;
-            border-radius: 15px; /* Abrundung des Popups */
-            overflow: hidden; /* Verhindert Überlauf bei abgerundeten Ecken */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optionale Schatten für mehr Stil */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             background: rgba(255, 255, 255, 0.95);
+            position: relative;
         }
-        h1 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        button {
-            padding: 5px 10px;
-            font-size: 14px;
-            font-style: initial;
+
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            border: 1px solid #007bff;
-            border-radius: 3px;
+        }
+
+        .close-btn:hover {
+            color: red;
+        }
+
+        h1 {
+            font-size: 16px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
             background-color: #007bff;
             color: white;
         }
+
         button:hover {
             background-color: #0056b3;
         }
 
-        #summaryOutput {
-            margin-top: 10px;
+        #markedText {
+            margin: 10px 0;
             padding: 10px;
-            border: 1px solid #ccc;
+            background-color: #e0e0e0;
             border-radius: 5px;
+            width: 90%;
+            text-align: center;
+            font-style: italic;
+        }
+
+        #processingText {
+            margin: 10px 0;
+            padding: 10px;
             background-color: #f9f9f9;
-            white-space: pre-wrap;
-            max-width: 380px; /* Passt sich der Breite des Popups an */
-            min-width: 380px;
-            max-height: 200px; /* Begrenze die maximale Höhe */
-            min-height: 200px;
-            overflow-y: auto; /* Scrollbalken bei zu viel Inhalt */
+            border-radius: 5px;
+            width: 90%;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        #result {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #d4edda;
+            border: 2px solid #c3e6cb;
+            border-radius: 5px;
+            width: 90%;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 10px;
+            background-color: #ccc;
+            border-radius: 5px;
+            margin: 10px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar span {
+            display: block;
+            height: 100%;
+            width: 80%;
+            background-color: #28a745;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-<h1>Truthguard</h1>
-<p>Lassen Sie einfach die gewünschten Informationen analysieren und erhalten Sie klare, kategorisierte Zusammenfassungen auf Knopfdruck – schnell, zuverlässig und übersichtlich!</p>
-<button id="analyzeText">Seite analysieren und zusammenfassen</button>
-<div id="summaryOutput"></div>
-<script src="popup.js"></script>
+<button class="close-btn" id="closePopup">X</button>
+<h1>Markieren Sie einen Text und klicken Sie auf den Button</h1>
+<button id="analyzeText">Analysieren</button>
+<div id="markedText">Der Vesuv ist ein Vulkan</div>
+<div id="processingText">Processing...</div>
+<div class="progress-bar"><span></span></div>
+<div id="result">Ja, der Vesuv ist ein Vulkan.</div>
 </body>
 </html>

@@ -1,2 +1,5 @@
-Du bekommst eine Frage und ein paar Informationen. Du gibst ein Key/Value Pair zurück. Links ist ein boolean Wert (true oder false) und rechts,
-getrennt mit einem Schrägstrich, ist eine kurze Antwort auf die Frage als String. Du darfst nichts anderes als das Verlangte antworten.
+Du bekommst eine These und ein paar Informationen, mit denen du die These beantworten musst.
+Du gibst eine Antwort im Format von Wert;Antwort zurück: Wert ist true, false oder unsure,
+nach dem Strichpunkt kommt eine kurze Antwort auf die These (max 6 Wörter), die deinen Wert unterstützt.
+Verwende unsure nur als Wert, wenn die gegeben Informationen unzureichend oder nicht vorhanden sind.
+Du darfst nichts anderes als den verlangten Inhalt antworten.

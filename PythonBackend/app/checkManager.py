@@ -101,7 +101,7 @@ class WebScraper:
             print(f"Error fetching {url}: {e}")
             return None
 
-    def get_wikipedia_urls(self, query, max_results=1):
+    def get_wikipedia_urls(self, query, max_results=1):  # nur 1 result wegen token limit
         wikipedia.set_lang("de")
 
         try:
@@ -129,7 +129,7 @@ class AnswerProcessor:
         except FileNotFoundError:
             return "File not found."
 
-    async def query_openai(self, query, model="gpt-3.5-turbo"):
+    async def query_openai(self, query, model="gpt-4"):
         try:
             response = await self.client.chat.completions.create(
                 messages=[
@@ -158,21 +158,47 @@ async def handler(websocket):
     async for message in websocket:
         print(f"Nachricht erhalten: {message}")
 
+        thesis = message.split(';')
+        category = thesis[1].lower().strip().translate({ord(c): None for c in '!@#$.'})
+        isIdentified = False
+        response = "Dies sollte nie gesehen werden"
+        # print(f"DEBUG: {category}")
+
         with open("scraped_content.txt", 'w') as file:
-            file.truncate(0)  # Löscht den gesamten Inhalt der Datei
+            file.truncate(0)
 
-        clean_message = cleaner.clean_text(message)
-        print(f"Clean Message: {clean_message}")
+        if category == "fakt":
+            print("Kategorie erkannt: Fakt")
+            isIdentified = True
 
-        urls = scraper.get_wikipedia_urls(clean_message)
+            clean_message = cleaner.clean_text(thesis[0])
+            print(f"Clean Message: {clean_message}")
 
-        for u in urls:
-            scraper.save_to_file("scraped_content.txt", scraper.get_page_content(u))
+            urls = scraper.get_wikipedia_urls(clean_message)
 
-        response = f"Scraping completed for query: {message}. Content saved to scraped_content.txt"
-        await websocket.send(response)
+            for u in urls:
+                scraper.save_to_file("scraped_content.txt", scraper.get_page_content(u))
 
-        response = await processor.answer(message)
+            response = f"Scraping completed for query: {thesis[0]}. Content saved to scraped_content.txt"
+            await websocket.send(response)
+
+            response = await processor.answer(thesis[0])
+
+        if category == "meinung":
+            response = "warning;Dies ist eine subjektive Meinung und kann nicht bewertet werden."
+            isIdentified = True
+
+        if category == "news":
+            response = "warning;Ich kann leider noch keine News überprüfen :("
+            isIdentified = True
+
+        if category == "statistik":
+            response = "warning;Ich kann leider noch keine Statistiken überprüfen :("
+            isIdentified = True
+
+        if isIdentified == False:
+            response = "warning;"
+
         await websocket.send(str(response))
 
 

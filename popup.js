@@ -1,29 +1,31 @@
 document.addEventListener('DOMContentLoaded', function () {
     const analyzeButton = document.getElementById("analyzeText");
     const summaryOutput = document.getElementById("summaryOutput");
+    const closeButton = document.getElementById("closePopup");
 
     analyzeButton.addEventListener("click", function () {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            // Extrahiere Text aus der aktiven Seite
             chrome.scripting.executeScript({
                 target: { tabId: tabs[0].id },
-                func: extractText,
+                func: extractSelectedText,
             }, (results) => {
                 if (chrome.runtime.lastError) {
                     console.error("Fehler beim Extrahieren:", chrome.runtime.lastError.message);
                     summaryOutput.textContent = "Fehler beim Extrahieren des Textes.";
                 } else {
-                    const extractedSections = results[0].result;
-                    console.log("Extrahierte Abschnitte:", extractedSections);
+                    const selectedText = results[0].result;
+                    console.log("Extrahierter markierter Text:", selectedText);
 
-                    // Sende die extrahierten Abschnitte an die API
+                    if (!selectedText || selectedText.trim() === "") {
+                        summaryOutput.textContent = "Bitte markiere Text, um ihn zu analysieren.";
+                        return;
+                    }
+
                     chrome.runtime.sendMessage(
-                        { action: 'summarizeTextSections', data: { sections: extractedSections } },
+                        { action: 'summarizeText', data: { text: selectedText } },
                         (response) => {
                             if (response && response.summary) {
                                 summaryOutput.textContent = response.summary;
-
-                                // Ausgabe der API-Antwort in der Browser-Konsole
                                 console.log("Zusammenfassung (API-Antwort):", response.summary);
                             } else {
                                 const errorMsg = response?.error || "keine API Antwort bekommen";
@@ -36,12 +38,14 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    closeButton.addEventListener("click", function () {
+        window.close();
+    });
 });
 
-// Funktion zum Extrahieren von Text auf der Seite
-function extractText() {
-    const pageText = document.body.innerText;
-    const sections = pageText.split('\n\n');
-    console.log("Extrahierte Textabschnitte:", sections);
-    return sections;
+function extractSelectedText() {
+    const selectedText = window.getSelection().toString();
+    console.log("Markierter Text:", selectedText);
+    return selectedText;
 }

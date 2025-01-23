@@ -10,7 +10,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 
 
-    if (message.action === 'summarizeTextSections') {
+    if (message.action === 'summarizeText') {
         // Laden des API-Schlüssels aus dem Speicher
         chrome.storage.local.get("openai_api_key", ({ openai_api_key }) => {
             if (!openai_api_key) {
@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 return;
             }
 
-            const textToSummarize = message.data.sections.join('\n\n');
+            const textToSummarize = message.data.text;
 
             // Prompt aus Datei laden
             fetch(chrome.runtime.getURL("prompt.txt"))
@@ -53,12 +53,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                                 );
                             });
 
-                            console.log("API-Antwort vollständig:", JSON.stringify(data, null, 2)); // Ausgabe der vollständigen API-Antwort in der Konsole
+                            console.log("API-Antwort vollständig:", JSON.stringify(data, null, 2));
 
                             const socket = new WebSocket("ws://localhost:6789");
 
                             socket.addEventListener('open', function (event) {
-                                socket.send('Der Vesuv ist ein Vulkan');
+                                socket.send(data.choices[0].message.content);
                             });
 
                             socket.addEventListener('message', function (event) {
