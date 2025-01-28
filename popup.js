@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const analyzeButton = document.getElementById("analyzeText");
     const summaryOutput = document.getElementById("summaryOutput");
     const closeButton = document.getElementById("closePopup");
+    const trueValue = document.getElementById("trueValue");
 
     analyzeButton.addEventListener("click", function () {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -25,10 +26,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         { action: 'summarizeText', data: { text: selectedText } },
                         (response) => {
                             if (response && response.summary) {
-                                summaryOutput.textContent = response.summary;
-                                console.log("Zusammenfassung (API-Antwort):", response.summary);
+                                const responseList = response.summary.split(';');
+                                summaryOutput.textContent = responseList[0];
+                                console.log("Backend Antwort:", response.summary);
                             } else {
-                                const errorMsg = response?.error || "keine API Antwort bekommen";
+                                const errorMsg = response?.error || "Fehler: keine Antwort vom Backend bekommen";
                                 summaryOutput.textContent = `Fehler: ${errorMsg}`;
                                 console.error("Fehler bei der Zusammenfassung:", errorMsg);
                             }
@@ -40,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     closeButton.addEventListener("click", function () {
-        window.close();
+        window.close(); // Schließt das Popup
     });
 });
 

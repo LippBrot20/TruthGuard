@@ -63,6 +63,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
                             socket.addEventListener('message', function (event) {
                                 console.log("Antwort von Backend: " + event.data);
+                                sendResponse(event.data)
                             });
 
                             const contactServer = () => {
@@ -73,12 +74,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                                 console.error("WebSocket-Fehler:", error);
                             };
 
-                            // Überprüfen, ob die Antwort gültig ist
-                            if (data.choices && data.choices[0] && data.choices[0].message) {
-                                sendResponse({ summary: data.choices[0].message.content.trim() });
-                            } else {
-                                sendResponse({ error: "Ungültige API-Antwort" });
-                            }
+                            //// Überprüfen, ob die Antwort gültig ist
+                            //if (data.choices && data.choices[0] && data.choices[0].message) {
+                            //    sendResponse({ summary: data.choices[0].message.content.trim() });
+                            //} else {
+                            //    sendResponse({ error: "Ungültige API-Antwort" });
+                            //}
                         })
                         .catch(error => {
                             console.error("Fehler bei der OpenAI-API:", error);

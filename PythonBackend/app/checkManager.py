@@ -179,8 +179,8 @@ async def handler(websocket):
             for u in urls:
                 scraper.save_to_file("scraped_content.txt", scraper.get_page_content(u))
 
-            response = f"Scraping completed for query: {thesis[0]}. Content saved to scraped_content.txt"
-            await websocket.send(response)
+            # response = f"Scraping completed for query: {thesis[0]}. Content saved to scraped_content.txt"
+            # await websocket.send(response)
 
             response = await processor.answer(thesis[0])
 
