@@ -63,7 +63,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
                             socket.addEventListener('message', function (event) {
                                 console.log("Antwort von Backend: " + event.data);
-                                sendResponse(event.data)
+                                sendResponse(event.data);
+                                socket.close();
                             });
 
                             const contactServer = () => {

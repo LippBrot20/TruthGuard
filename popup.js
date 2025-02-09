@@ -25,10 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     chrome.runtime.sendMessage(
                         { action: 'summarizeText', data: { text: selectedText } },
                         (response) => {
-                            if (response && response.summary) {
-                                const responseList = response.summary.split(';');
-                                summaryOutput.textContent = responseList[0];
-                                console.log("Backend Antwort:", response.summary);
+                            if (response) {
+                                summaryOutput.textContent = response || response.error;
+                                console.log("Backend Antwort:", response);
                             } else {
                                 const errorMsg = response?.error || "Fehler: keine Antwort vom Backend bekommen";
                                 summaryOutput.textContent = `Fehler: ${errorMsg}`;

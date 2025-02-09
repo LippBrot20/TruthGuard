@@ -113,7 +113,11 @@ class WebScraper:
             print(f"Wikipedia Fehler: {e}")
             return []
 
-    def save_to_file(self, filename, data):
+    def save_to_file(self, filename, data, max_chars=4000):
+
+        if len(data) > max_chars:
+            data = data[:max_chars]
+
         with open(filename, 'a', encoding='utf-8') as f:
             f.write(data + '\n')
 
@@ -144,8 +148,9 @@ class AnswerProcessor:
 
     def answer(self, input_question):
         file_content = self.read_file_content("scraped_content.txt")
-        prompt = self.read_file_content("answerprompt.txt")
+        prompt = self.read_file_content("PythonBackend/answerprompt.txt")
         query = prompt + "\n\n Frage: \n" + input_question + "\n\n" + "Informationen: \n" + file_content
+        print(f"DEBUG:  QUERY: " + query)
         gpt_response = self.query_openai(query)
         return gpt_response
 
